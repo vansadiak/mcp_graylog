@@ -72,6 +72,16 @@ class GraylogClient:
             {"Content-Type": "application/json", "Accept": "application/json"}
         )
 
+        # Parse and add cookies if provided
+        if config.graylog.cookies:
+            logger.debug(f"Parsing cookies: {config.graylog.cookies}")
+            cookie_pairs = config.graylog.cookies.split(';')
+            for pair in cookie_pairs:
+                if '=' in pair:
+                    key, value = pair.strip().split('=', 1)
+                    self.session.cookies.set(key.strip(), value.strip())
+                    logger.debug(f"Added cookie: {key.strip()}={value.strip()}")
+
         self.session.verify = config.graylog.verify_ssl
         self.timeout = config.graylog.timeout
 
@@ -102,7 +112,7 @@ class GraylogClient:
 
             # Handle authentication errors specifically
             if response.status_code == 401:
-                logger.error("Authentication failed - check your username and password")
+                logger.error("Authentication failed - check your token")
                 logger.error(f"Response text: {response.text}")
                 raise requests.exceptions.HTTPError(
                     f"Authentication failed (401): {response.text}"
@@ -459,7 +469,7 @@ class GraylogClient:
             return True
         except requests.exceptions.HTTPError as e:
             if "401" in str(e):
-                logger.error("Authentication failed - check your username and password")
+                logger.error("Authentication failed - check your token")
                 logger.error(
                     f"   Authorization header: {self.session.headers.get('Authorization', 'None')[:20]}..."
                 )

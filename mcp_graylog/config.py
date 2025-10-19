@@ -15,8 +15,8 @@ class GraylogConfig(BaseSettings):
     endpoint: str = Field(
         "http://localhost:9000", description="Graylog server endpoint URL"
     )
-    username: str = Field("admin", description="Graylog username")
-    password: str = Field("admin", description="Graylog password")
+    token: str = Field(..., description="Graylog API token")
+    cookies: Optional[str] = Field(None, description="Cookie string for OAuth2 (format: key1=val1; key2=val2)")
     verify_ssl: bool = Field(True, description="Verify SSL certificates")
     timeout: int = Field(60, description="Request timeout in seconds")
 
@@ -43,13 +43,12 @@ class Config:
 
         # Log configuration for debugging
         logger.info(f"Graylog endpoint: {self.graylog.endpoint}")
-        logger.info(f"Has username: {bool(self.graylog.username)}")
-        logger.info(f"Has password: {bool(self.graylog.password)}")
+        logger.info(f"Has token: {bool(self.graylog.token)}")
+        logger.info(f"Has cookies: {bool(self.graylog.cookies)}")
 
         # Validate authentication only if not using defaults
         if (
-            self.graylog.username == "admin"
-            and self.graylog.password == "admin"
+            self.graylog.token == "admin"
             and self.graylog.endpoint == "http://localhost:9000"
         ):
             logger.warning(
@@ -59,12 +58,8 @@ class Config:
     @property
     def auth_headers(self) -> dict:
         """Get authentication headers for Graylog API."""
-        import base64
-
-        credentials = f"{self.graylog.username}:{self.graylog.password}"
-        encoded = base64.b64encode(credentials.encode()).decode()
-        logger.info("Using Basic authentication")
-        return {"Authorization": f"Basic {encoded}"}
+        logger.info("Using token authentication")
+        return {"Authorization": self.graylog.token}
 
 
 # Global configuration instance

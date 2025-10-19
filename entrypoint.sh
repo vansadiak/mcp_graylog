@@ -15,12 +15,12 @@ wait_for_dependencies() {
         log "WARNING: GRAYLOG_ENDPOINT not set, using default"
     fi
     
-    if [ -z "$GRAYLOG_USERNAME" ]; then
-        log "WARNING: GRAYLOG_USERNAME not set, using default"
+    if [ -z "$GRAYLOG_TOKEN" ]; then
+        log "WARNING: GRAYLOG_TOKEN not set, using default"
     fi
     
-    if [ -z "$GRAYLOG_PASSWORD" ]; then
-        log "WARNING: GRAYLOG_PASSWORD not set, using default"
+    if [ -n "$GRAYLOG_COOKIES" ]; then
+        log "INFO: GRAYLOG_COOKIES detected, will be used for OAuth2 authentication"
     fi
 }
 

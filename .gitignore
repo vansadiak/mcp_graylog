@@ -194,3 +194,6 @@ Thumbs.db
 # Docker images
 *.tar
 mcp-graylog-image.tar 
+
+#env files
+myenv

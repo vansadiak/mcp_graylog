@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from fastmcp import FastMCP
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 from .client import GraylogClient, QueryParams, AggregationParams
 from .config import config
@@ -45,14 +45,16 @@ class SearchLogsRequest(BaseModel):
     sort_direction: str = Field("desc", description="Sort direction (asc/desc)")
     stream_id: Optional[str] = Field(None, description="Stream ID to search in")
 
-    @validator("query")
+    @field_validator("query")
+    @classmethod
     def validate_query(cls, v):
         """Validate that query is not empty."""
         if not v or not v.strip():
             raise ValueError("Query cannot be empty")
         return v.strip()
 
-    @validator("limit")
+    @field_validator("limit")
+    @classmethod
     def validate_limit(cls, v):
         """Validate limit is within reasonable bounds."""
         if v < 1:
@@ -61,7 +63,8 @@ class SearchLogsRequest(BaseModel):
             raise ValueError("Limit cannot exceed 1000")
         return v
 
-    @validator("time_range")
+    @field_validator("time_range")
+    @classmethod
     def validate_time_range(cls, v):
         """Validate time range format."""
         if v is None:
@@ -103,14 +106,16 @@ class AggregationRequest(BaseModel):
         None, description="Time interval for date histograms"
     )
 
-    @validator("query")
+    @field_validator("query")
+    @classmethod
     def validate_query(cls, v):
         """Validate that query is not empty."""
         if not v or not v.strip():
             raise ValueError("Query cannot be empty")
         return v.strip()
 
-    @validator("aggregation_type")
+    @field_validator("aggregation_type")
+    @classmethod
     def validate_aggregation_type(cls, v):
         """Validate aggregation type."""
         valid_types = [
@@ -129,14 +134,16 @@ class AggregationRequest(BaseModel):
             )
         return v
 
-    @validator("field")
+    @field_validator("field")
+    @classmethod
     def validate_field(cls, v):
         """Validate that field is not empty."""
         if not v or not v.strip():
             raise ValueError("Field cannot be empty")
         return v.strip()
 
-    @validator("size")
+    @field_validator("size")
+    @classmethod
     def validate_size(cls, v):
         """Validate size is within reasonable bounds."""
         if v < 1:
@@ -145,7 +152,8 @@ class AggregationRequest(BaseModel):
             raise ValueError("Size cannot exceed 100")
         return v
 
-    @validator("time_range")
+    @field_validator("time_range")
+    @classmethod
     def validate_time_range(cls, v):
         """Validate time range format."""
         if not v or not v.strip():
@@ -189,21 +197,24 @@ class StreamSearchRequest(BaseModel):
     )
     limit: int = Field(50, description="Maximum number of results (1-100)")
 
-    @validator("stream_id")
+    @field_validator("stream_id")
+    @classmethod
     def validate_stream_id(cls, v):
         """Validate that stream_id is not empty."""
         if not v or not v.strip():
             raise ValueError("Stream ID cannot be empty")
         return v.strip()
 
-    @validator("query")
+    @field_validator("query")
+    @classmethod
     def validate_query(cls, v):
         """Validate that query is not empty."""
         if not v or not v.strip():
             raise ValueError("Query cannot be empty")
         return v.strip()
 
-    @validator("limit")
+    @field_validator("limit")
+    @classmethod
     def validate_limit(cls, v):
         """Validate limit is within reasonable bounds."""
         if v < 1:
@@ -212,7 +223,8 @@ class StreamSearchRequest(BaseModel):
             raise ValueError("Limit cannot exceed 100")
         return v
 
-    @validator("time_range")
+    @field_validator("time_range")
+    @classmethod
     def validate_time_range(cls, v):
         """Validate time range format."""
         if v is None:
