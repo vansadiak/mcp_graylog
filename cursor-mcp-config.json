@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "graylog": {
+      "command": "/Users/vansadiak/Desktop/codebase/personal/mcp_graylog/myenv/bin/python",
+      "args": ["run_server.py"],
+      "cwd": "/Users/vansadiak/Desktop/codebase/personal/mcp_graylog",
+      "env": {
+        "GRAYLOG_ENDPOINT": "https://your-graylog-server:9000",
+        "GRAYLOG_TOKEN": "your-api-token-here",
+        "GRAYLOG_COOKIES": "key1=value1; key2=value2; key3=value3",
+        "GRAYLOG_VERIFY_SSL": "true",
+        "GRAYLOG_TIMEOUT": "60",
+        "LOG_LEVEL": "INFO",
+        "LOG_FORMAT": "json"
+      }
+    }
+  }
+}

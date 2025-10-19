@@ -29,18 +29,7 @@ def check_environment():
     required_vars = ["GRAYLOG_ENDPOINT", "GRAYLOG_TOKEN"]
     missing_vars = []
 
-    for var in required_vars:
-        if not os.getenv(var):
-            missing_vars.append(var)
 
-    if missing_vars:
-        print("Starting MCP Graylog Server")
-        print("Warning: Make sure to set authentication credentials:")
-        for var in missing_vars:
-            print(f"  - {var}")
-        print("\nYou can set these in your environment or create a .env file.")
-        print("Note: GRAYLOG_COOKIES is optional for OAuth2 authentication.")
-        return False
 
     return True
 
@@ -55,20 +44,20 @@ def main():
     try:
         from mcp_graylog.server import mcp_server
 
-        print("MCP Server imported successfully")
-        print("Starting MCP Graylog server...")
+        print("MCP Server imported successfully", file=sys.stderr)
+        print("Starting MCP Graylog server...", file=sys.stderr)
 
         # Run the MCP server over stdio
         mcp_server.run()
 
     except ImportError as e:
-        print(f"ERROR: Failed to import server module: {e}")
-        print("Make sure all dependencies are installed:")
-        print("  pip install -r requirements.txt")
+        print(f"ERROR: Failed to import server module: {e}", file=sys.stderr)
+        print("Make sure all dependencies are installed:", file=sys.stderr)
+        print("  pip install -r requirements.txt", file=sys.stderr)
         return 1
 
     except Exception as e:
-        print(f"ERROR: Failed to start server: {e}")
+        print(f"ERROR: Failed to start server: {e}", file=sys.stderr)
         return 1
 
 

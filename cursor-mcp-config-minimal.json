@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "graylog": {
+      "command": "/Users/vansadiak/Desktop/codebase/personal/mcp_graylog/myenv/bin/python",
+      "args": ["run_server.py"],
+      "cwd": "/Users/vansadiak/Desktop/codebase/personal/mcp_graylog",
+      "env": {
+        "GRAYLOG_ENDPOINT": "https://your-graylog-server:9000",
+        "GRAYLOG_TOKEN": "your-api-token-here"
+      }
+    }
+  }
+}

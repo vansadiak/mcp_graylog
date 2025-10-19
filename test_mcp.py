@@ -15,8 +15,12 @@ async def test_mcp_server():
     
     # Set up server parameters
     server_params = StdioServerParameters(
-        command="python3",
+        command="/Users/vansadiak/Desktop/codebase/personal/mcp_graylog/myenv/bin/python",
         args=["run_server.py"],
+        env={
+            "GRAYLOG_ENDPOINT": "https://graylog.strawmine.com/",
+            "GRAYLOG_TOKEN": "token",
+        }
     )
     
     print("Testing MCP Graylog Server")
